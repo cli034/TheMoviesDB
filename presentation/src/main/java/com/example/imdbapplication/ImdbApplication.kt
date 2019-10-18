@@ -1,7 +1,7 @@
 package com.example.imdbapplication
 
 import android.app.Application
-import com.example.imdbapplication.di.DaggerAppComponent
+import com.example.imdbapplication.di.component.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
