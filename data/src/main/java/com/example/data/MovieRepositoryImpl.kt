@@ -2,11 +2,14 @@ package com.example.data
 
 import com.example.domain.model.MovieResponse
 import com.example.domain.repository.MovieRepository
-import io.reactivex.rxjava3.core.Single
+import io.reactivex.Single
+import javax.inject.Inject
 
-class MovieRepositoryImpl(): MovieRepository {
+class MovieRepositoryImpl @Inject constructor(
+    private val movieService: MovieService
+): MovieRepository {
     override fun getMovieList(): Single<MovieResponse> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return movieService.getMovieList()
     }
 
 }

@@ -1,7 +1,7 @@
 package com.example.data
 
 import com.example.domain.model.MovieResponse
-import io.reactivex.rxjava3.core.Single
+import io.reactivex.Single
 import retrofit2.http.GET
 
 interface MovieService {

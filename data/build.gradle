@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -34,13 +36,26 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 
+    //dagger2
+    def dagger2_version = "2.24"
+    implementation "com.google.dagger:dagger-android:$dagger2_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger2_version"
+    implementation "com.google.dagger:dagger-android:$dagger2_version"
+    implementation "com.google.dagger:dagger-android-support:$dagger2_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger2_version"
+
     def retrofit_version = "2.6.2"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
 
     //RxJava
-    def rxjava_version = "3.0.0-RC3"
-    implementation "io.reactivex.rxjava3:rxjava:$rxjava_version"
+//    def rxjava_version = "3.0.0-RC3"
+//    implementation "io.reactivex.rxjava3:rxjava:$rxjava_version"
+    def rxjava_version = "2.2.13"
+    def rxandroid_version = "2.1.1"
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
 
     implementation project(':domain')
 }

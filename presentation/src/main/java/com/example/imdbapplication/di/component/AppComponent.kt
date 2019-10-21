@@ -1,7 +1,8 @@
 package com.example.imdbapplication.di.component
 
 import com.example.imdbapplication.ImdbApplication
-import com.example.imdbapplication.di.ActivityBuilderModule
+import com.example.imdbapplication.di.ViewModelModule
+import com.example.imdbapplication.di.module.ActivityBuilderModule
 import com.example.imdbapplication.di.module.NetworkModule
 import com.example.imdbapplication.di.module.RepositoryModule
 import com.example.imdbapplication.di.module.ServiceModule
@@ -14,6 +15,7 @@ import javax.inject.Singleton
 @Component(modules = [
     AndroidInjectionModule::class,
     ActivityBuilderModule::class,
+    ViewModelModule::class,
     RepositoryModule::class,
     NetworkModule::class,
     ServiceModule::class
