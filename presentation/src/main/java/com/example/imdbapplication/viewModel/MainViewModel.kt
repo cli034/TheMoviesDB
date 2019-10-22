@@ -29,18 +29,18 @@ class MainViewModel @Inject constructor(
 //            movieRepository.getMovieList()
 //                .subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe({this.test(it)}, {this.error(it)})
+//                .subscribe({this.success(it)}, {this.error(it)})
 //        )
 
         compositeDisposable.add(
             movieRepository.getMovieList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(::test, ::error)
+                .subscribe(::success, ::error)
         )
     }
 
-    private fun test(movieResponse: MovieResponse) {
+    private fun success(movieResponse: MovieResponse) {
         if (movieResponse.results != null) {
             _moveListLiveData.value = movieResponse.results
         }
