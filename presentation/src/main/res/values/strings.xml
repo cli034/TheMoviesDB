@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">imdbApplication</string>
+    <string name="app_name">The Movie DB</string>
+    <string name="vote_count">Vote Count: </string>
 </resources>
