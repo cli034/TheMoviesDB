@@ -1,2 +1,2 @@
 # imdbMovies
-IMDB Android App
+TheMovieDB Android App
