@@ -2,7 +2,6 @@ package com.example.imdbapplication.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -32,6 +31,15 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.mainToolbar)
         initViewModel()
         initRecyclerView()
+        initListeners()
+    }
+
+    private fun initListeners() {
+        binding.mainRefreshTextView.setOnClickListener {
+            binding.mainProgressBar.visibility = View.VISIBLE
+            binding.mainRecyclerView.visibility = View.INVISIBLE
+            mainViewModel.getMovieListFromApi()
+        }
     }
 
     private fun initViewModel() {
@@ -40,6 +48,7 @@ class MainActivity : AppCompatActivity() {
             binding.mainProgressBar.visibility = View.VISIBLE
             mainListAdapter.submitList(it)
             binding.mainProgressBar.visibility = View.GONE
+            binding.mainRecyclerView.visibility = View.VISIBLE
         })
     }
 

@@ -21,17 +21,33 @@ class MainViewModel @Inject constructor(
     val movieListLiveData: LiveData<List<Movie>> get() = _moveListLiveData
 
     init {
-        getMovieList()
+        getMovieListFromDb()
     }
 
-    fun getMovieList() {
+    fun getMovieListFromDb() {
 //        compositeDisposable.add(
-//            movieRepository.getMovieList()
+//            movieRepository.getMovieListFromDb()
 //                .subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribe({this.success(it)}, {this.error(it)})
 //        )
 
+        compositeDisposable.add(
+            movieRepository.getMovieListFromDb()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(::loadMovieListLiveDataFromDb, ::error)
+        )
+
+//        compositeDisposable.add(
+//            movieRepository.getMovieListFromDb()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(::success, ::error)
+//        )
+    }
+
+    fun getMovieListFromApi() {
         compositeDisposable.add(
             movieRepository.getMovieList()
                 .subscribeOn(Schedulers.io())
@@ -40,9 +56,23 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    private fun loadMovieListLiveDataFromDb(movieList: List<Movie>) {
+        if (movieList.isNotEmpty()) {
+            Log.d("movies_list", "load from local db")
+            _moveListLiveData.value = movieList
+        } else {
+            getMovieListFromApi()
+        }
+    }
+
     private fun success(movieResponse: MovieResponse) {
         if (movieResponse.results != null) {
+            Log.d("movies_list", "load from api")
             _moveListLiveData.value = movieResponse.results
+            Thread {
+                movieRepository.saveMovieListToDb(movieResponse.results!!)
+                Log.d("q_check", "HI")
+            }.start()
         }
     }
 
