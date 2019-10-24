@@ -29,7 +29,7 @@ class MainViewModel @Inject constructor(
 //            movieRepository.getMovieListFromDb()
 //                .subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe({this.success(it)}, {this.error(it)})
+//                .subscribe({this.loadMovieListLiveDataFromApi(it)}, {this.error(it)})
 //        )
 
         compositeDisposable.add(
@@ -38,13 +38,6 @@ class MainViewModel @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(::loadMovieListLiveDataFromDb, ::error)
         )
-
-//        compositeDisposable.add(
-//            movieRepository.getMovieListFromDb()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(::success, ::error)
-//        )
     }
 
     fun getMovieListFromApi() {
@@ -52,26 +45,24 @@ class MainViewModel @Inject constructor(
             movieRepository.getMovieList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(::success, ::error)
+                .subscribe(::loadMovieListLiveDataFromApi, ::error)
         )
     }
 
     private fun loadMovieListLiveDataFromDb(movieList: List<Movie>) {
         if (movieList.isNotEmpty()) {
-            Log.d("movies_list", "load from local db")
             _moveListLiveData.value = movieList
         } else {
             getMovieListFromApi()
         }
     }
 
-    private fun success(movieResponse: MovieResponse) {
+    private fun loadMovieListLiveDataFromApi(movieResponse: MovieResponse) {
         if (movieResponse.results != null) {
-            Log.d("movies_list", "load from api")
-            _moveListLiveData.value = movieResponse.results
+            val movieList = movieResponse.results?.sortedByDescending { it.vote_count }
+            _moveListLiveData.value = movieList
             Thread {
-                movieRepository.saveMovieListToDb(movieResponse.results!!)
-                Log.d("q_check", "HI")
+                movieRepository.saveMovieListToDb(movieList!!)
             }.start()
         }
     }
