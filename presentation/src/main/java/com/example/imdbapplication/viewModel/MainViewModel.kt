@@ -62,6 +62,7 @@ class MainViewModel @Inject constructor(
             val movieList = movieResponse.results?.sortedByDescending { it.vote_count }
             _moveListLiveData.value = movieList
             Thread {
+                movieRepository.deleteAllMoviesFromDb()
                 movieRepository.saveMovieListToDb(movieList!!)
             }.start()
         }
