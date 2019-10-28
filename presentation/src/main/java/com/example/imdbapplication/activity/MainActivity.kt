@@ -3,6 +3,7 @@ package com.example.imdbapplication.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,7 +18,9 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels {
+        viewModelFactory
+    }
 
     lateinit var mainListAdapter: MainListAdapter
 
@@ -43,7 +46,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
-        mainViewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+//        mainViewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         mainViewModel.movieListLiveData.observe(this, Observer {
             binding.mainProgressBar.visibility = View.VISIBLE
             mainListAdapter.submitList(it)

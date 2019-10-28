@@ -41,6 +41,9 @@ dependencies {
     implementation project(':domain')
     implementation project(':data')
 
+    def fragment_version = "1.1.0"
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
+
     def recyclerview_version = "1.0.0"
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
 
