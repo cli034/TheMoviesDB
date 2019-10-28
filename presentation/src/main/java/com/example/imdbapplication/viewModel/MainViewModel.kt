@@ -20,6 +20,9 @@ class MainViewModel @Inject constructor(
     private val _moveListLiveData = MutableLiveData<List<Movie>>()
     val movieListLiveData: LiveData<List<Movie>> get() = _moveListLiveData
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
     init {
         getMovieListFromDb()
     }
@@ -32,6 +35,7 @@ class MainViewModel @Inject constructor(
 //                .subscribe({this.loadMovieListLiveDataFromApi(it)}, {this.error(it)})
 //        )
 
+        _isLoading.value = true
         compositeDisposable.add(
             movieRepository.getMovieListFromDb()
                 .subscribeOn(Schedulers.io())
@@ -41,6 +45,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun getMovieListFromApi() {
+        _isLoading.value = true
         compositeDisposable.add(
             movieRepository.getMovieList()
                 .subscribeOn(Schedulers.io())
@@ -52,6 +57,7 @@ class MainViewModel @Inject constructor(
     private fun loadMovieListLiveDataFromDb(movieList: List<Movie>) {
         if (movieList.isNotEmpty()) {
             _moveListLiveData.value = movieList
+            _isLoading.value = false
         } else {
             getMovieListFromApi()
         }
@@ -61,6 +67,7 @@ class MainViewModel @Inject constructor(
         if (movieResponse.results != null) {
             val movieList = movieResponse.results?.sortedByDescending { it.vote_count }
             _moveListLiveData.value = movieList
+            _isLoading.value = false
             Thread {
                 movieRepository.deleteAllMoviesFromDb()
                 movieRepository.saveMovieListToDb(movieList!!)

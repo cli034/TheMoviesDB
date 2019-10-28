@@ -32,26 +32,28 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setSupportActionBar(binding.mainToolbar)
+        initDataBinding()
         initViewModel()
         initRecyclerView()
         initListeners()
     }
 
+    private fun initDataBinding() {
+        binding.lifecycleOwner = this // Use viewLifeCycleOwner for fragments
+        binding.viewModel = mainViewModel
+    }
+
     private fun initListeners() {
         binding.mainRefreshTextView.setOnClickListener {
-            binding.mainProgressBar.visibility = View.VISIBLE
-            binding.mainRecyclerView.visibility = View.INVISIBLE
             mainViewModel.getMovieListFromApi()
         }
     }
 
     private fun initViewModel() {
 //        mainViewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        // Use viewLifeCycleOwner for fragments
         mainViewModel.movieListLiveData.observe(this, Observer {
-            binding.mainProgressBar.visibility = View.VISIBLE
             mainListAdapter.submitList(it)
-            binding.mainProgressBar.visibility = View.GONE
-            binding.mainRecyclerView.visibility = View.VISIBLE
         })
     }
 
